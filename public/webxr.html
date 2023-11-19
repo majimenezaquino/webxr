@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+    <script src="https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js"></script>
+  </head>
+  <body style="margin : 0px; overflow: hidden;">
+    <a-scene embedded arjs='sourceType: webcam;'>
+      <!-- Marcador personalizado con el patrón -->
+      <!-- <a-marker preset="custom" patternUrl="tu_patron.patt"> -->
+        <!-- Aquí puedes añadir tu contenido HTML, como texto o imágenes -->
+        <a-text value="¡Hola Mundo!" position="0 0.5 0" scale="1 1 1" rotation="0 0 0"></a-text>
+      </a-marker>
+      <a-entity camera></a-entity>
+    </a-scene>
+  </body>
+  <script>
+function checkWebXRARSupport() {
+    // Verifica si 'navigator.xr' está disponible
+    if (navigator.xr) {
+        // Si está disponible, verifica si soporta el modo 'immersive-ar'
+        navigator.xr.isSessionSupported('immersive-ar').then((supported) => {
+            if (supported) {
+                // Si soporta 'immersive-ar', WebXR con AR está soportado
+                alert("WebXR soportado con modo immersive-ar.");
+            } else {
+                // Si no soporta 'immersive-ar', WebXR con AR no está completamente soportado
+                console.log("WebXR con AR no soportado completamente (immersive-ar no disponible).");
+            }
+        });
+    } else {
+        // Si 'navigator.xr' no está disponible, WebXR con AR no está soportado
+        console.log("WebXR con AR no soportado.");
+    }
+}
+
+// Llamar a la función para verificar el soporte de AR en WebXR
+checkWebXRARSupport();
+
+  </script>
+</html>
