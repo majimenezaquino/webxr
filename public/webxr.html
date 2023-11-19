@@ -1,41 +1,63 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
-    <script src="https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js"></script>
-  </head>
-  <body style="margin : 0px; overflow: hidden;">
-    <a-scene embedded arjs='sourceType: webcam;'>
-      <!-- Marcador personalizado con el patrón -->
-      <!-- <a-marker preset="custom" patternUrl="tu_patron.patt"> -->
-        <!-- Aquí puedes añadir tu contenido HTML, como texto o imágenes -->
-        <a-text value="¡Hola Mundo!" position="0 0.5 0" scale="1 1 1" rotation="0 0 0"></a-text>
-      </a-marker>
-      <a-entity camera></a-entity>
-    </a-scene>
-  </body>
-  <script>
-function checkWebXRARSupport() {
-    // Verifica si 'navigator.xr' está disponible
-    if (navigator.xr) {
-        // Si está disponible, verifica si soporta el modo 'immersive-ar'
-        navigator.xr.isSessionSupported('immersive-ar').then((supported) => {
-            if (supported) {
-                // Si soporta 'immersive-ar', WebXR con AR está soportado
-                alert("WebXR soportado con modo immersive-ar.");
-            } else {
-                // Si no soporta 'immersive-ar', WebXR con AR no está completamente soportado
-                console.log("WebXR con AR no soportado completamente (immersive-ar no disponible).");
+    <head>
+        <style>
+            .arjs-loader {
+              height: 100%;
+              width: 100%;
+              position: absolute;
+              top: 0;
+              left: 0;
+              background-color: rgba(0, 0, 0, 0.8);
+              z-index: 9999;
+              display: flex;
+              justify-content: center;
+              align-items: center;
             }
-        });
-    } else {
-        // Si 'navigator.xr' no está disponible, WebXR con AR no está soportado
-        console.log("WebXR con AR no soportado.");
-    }
-}
-
-// Llamar a la función para verificar el soporte de AR en WebXR
-checkWebXRARSupport();
-
-  </script>
+          
+            .arjs-loader div {
+              text-align: center;
+              font-size: 1.25em;
+              color: white;
+            }
+          </style>
+    </head>
+    <script src="https://cdn.jsdelivr.net/gh/aframevr/aframe@1c2407b26c61958baa93967b5412487cd94b290b/dist/aframe-master.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+    <body style="margin : 0px; overflow: hidden;">
+    <!-- minimal loader shown until image descriptors are loaded. Loading may take a while according to the device computational power -->
+  <div class="arjs-loader">
+    <div>Loading, please wait...</div>
+  </div>
+ 
+  <!-- a-frame scene -->
+  <a-scene
+    vr-mode-ui="enabled: false;"
+    renderer="logarithmicDepthBuffer: true;"
+    embedded
+    arjs="trackingMethod: best; sourceType: webcam;debugUIEnabled: false;"
+  >
+  <a-assets>
+    <a-asset-item id="animated-asset" src="https://raw.githubusercontent.com/nicolocarpignoli/nicolocarpignoli.github.io/master/ar-playground/models/CesiumMan.gltf"></a-asset-item>
+</a-assets>
+    <!-- a-nft is the anchor that defines an Image Tracking entity -->
+    <!-- on 'url' use the path to the Image Descriptors created before. -->
+    <!-- the path should end with the name without the extension e.g. if file is 'pinball.fset' the path should end with 'pinball' -->
+    <a-marker
+      type="pattern"
+      url="https://localhost:3000/mark.patt"
+      smooth="true"
+      smoothCount="10"
+      smoothTolerance=".01"
+      smoothThreshold="5"
+    >
+    <a-entity
+    gltf-model="#animated-asset"
+    scale="2">
+</a-entity>
+    </a-marker>
+    <!-- static camera that moves according to the device movemenents -->
+    <a-entity camera></a-entity>
+  </a-scene>
+    </body>
 </html>
